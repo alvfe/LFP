@@ -1,14 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Form from "react-bootstrap/Form";
-import { fetchUserInfo } from "../../redux_store";
 import axios from "axios";
 import Button from "react-bootstrap/Button";
+import { fetchUserInfo } from "../../redux_store";
 
 const updateUser = (id, data) => {
   axios.put(`https://reqres.in/api/users/${id}`, data).then((response) => {
     if (response.status == 200) {
       alert("Se han guardado los cambios correctamente");
+    }
+  });
+};
+
+const deleteUser = (id) => {
+  axios.delete(`https://reqres.in/api/users/${id}`).then((response) => {
+    if (response.status == 204) {
+      alert("Se ha eliminado al usuario");
     }
   });
 };
@@ -84,9 +92,20 @@ function UserInfo(props) {
         );
       }
       return (
-        <Button variant="primary" onClick={() => setEditMode(true)}>
-          Editar
-        </Button>
+        <div>
+          <Button variant="primary" onClick={() => setEditMode(true)}>
+            Editar
+          </Button>
+          <Button
+            className="ml-2"
+            onClick={() => {
+              deleteUser(id);
+            }}
+            variant="danger"
+          >
+            Eliminar
+          </Button>
+        </div>
       );
     };
 

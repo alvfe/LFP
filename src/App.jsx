@@ -14,6 +14,7 @@ import LoginForm from "./components/login/LoginForm";
 import MainNavbar from "./components/main/Navbar";
 import MainTemplate from "./components/main/MainTemplate";
 import UserInfo from "./components/users/UserInfo";
+import Home from "./components/main/Home";
 
 function App() {
   return (
@@ -23,7 +24,7 @@ function App() {
         <MainTemplate>
           <Switch>
             <Route exact path="/">
-              <div></div>
+              <Home />
             </Route>
             <Route exact path="/login">
               <LoginForm />
@@ -46,7 +47,7 @@ function isAuthenticated() {
     return true;
   }
 
-  return true;
+  return false;
 }
 
 function PrivateRoute({ children, ...rest }) {
