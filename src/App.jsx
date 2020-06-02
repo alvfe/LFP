@@ -32,7 +32,7 @@ function App() {
             <PrivateRoute exact path="/users">
               <Users />
             </PrivateRoute>
-            <PrivateRoute path="/users/:id" component={UserInfo} />
+            <PrivateRoute exact path="/users/:id" children={UserInfo} />
           </Switch>
         </MainTemplate>
       </Router>
@@ -42,7 +42,7 @@ function App() {
 
 function isAuthenticated() {
   const { token } = store.getState().session;
-
+  console.log("toekn" + token);
   if (token && token !== "") {
     return true;
   }
@@ -53,9 +53,10 @@ function isAuthenticated() {
 function PrivateRoute({ children, ...rest }) {
   return (
     <Route
+      // eslint-disable-next-line react/jsx-props-no-spreading
       {...rest}
       render={({ location }) =>
-        isAuthenticated() ? (
+        (isAuthenticated() ? (
           children
         ) : (
           <Redirect
@@ -64,7 +65,7 @@ function PrivateRoute({ children, ...rest }) {
               state: { from: location },
             }}
           />
-        )
+        ))
       }
     />
   );
