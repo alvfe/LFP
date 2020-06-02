@@ -29,10 +29,8 @@ function App() {
             <Route exact path="/login">
               <LoginForm />
             </Route>
-            <PrivateRoute exact path="/users">
-              <Users />
-            </PrivateRoute>
-            <PrivateRoute exact path="/users/:id" children={UserInfo} />
+            <PrivateRoute exact path="/users" component={Users} />
+            <PrivateRoute exact path="/users/:id" component={UserInfo} />
           </Switch>
         </MainTemplate>
       </Router>
@@ -42,7 +40,6 @@ function App() {
 
 function isAuthenticated() {
   const { token } = store.getState().session;
-  console.log("toekn" + token);
   if (token && token !== "") {
     return true;
   }
@@ -50,23 +47,16 @@ function isAuthenticated() {
   return false;
 }
 
-function PrivateRoute({ children, ...rest }) {
+function PrivateRoute({ component, ...rest }) {
+  if (isAuthenticated()) {
+    return <Route {...rest} component={component} />;
+  }
+
   return (
-    <Route
-      // eslint-disable-next-line react/jsx-props-no-spreading
-      {...rest}
-      render={({ location }) =>
-        (isAuthenticated() ? (
-          children
-        ) : (
-          <Redirect
-            to={{
-              pathname: "/login",
-              state: { from: location },
-            }}
-          />
-        ))
-      }
+    <Redirect
+      to={{
+        pathname: "/login",
+      }}
     />
   );
 }
